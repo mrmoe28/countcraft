@@ -84,8 +84,14 @@ export async function POST(request: Request) {
     return NextResponse.json(performance);
   } catch (error) {
     if (error instanceof Error) {
-      return NextResponse.json({ error: 'Failed to create performance', details: error.message }, { status: 500 });
+      console.error('Performance creation error:', error);
+      return NextResponse.json({
+        error: 'Failed to create performance',
+        details: error.message,
+        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      }, { status: 500 });
     }
+    console.error('Unknown performance creation error:', error);
     return NextResponse.json({ error: 'Failed to create performance' }, { status: 500 });
   }
 }

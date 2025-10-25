@@ -96,7 +96,11 @@ export default function PerformanceEditorPage({ params }: { params: Promise<{ id
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        performance: { name: performance?.name || 'Untitled' },
+        performance: {
+          name: performance?.name || 'Untitled',
+          team: performance?.team || undefined,
+          eventDate: performance?.eventDate ? new Date(performance.eventDate).toISOString() : null,
+        },
         track: trackData,
         notes: notesData,
       }),

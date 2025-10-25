@@ -33,7 +33,7 @@ export const BatchCreatePerformanceSchema = z.object({
   performance: z.object({
     name: z.string().min(1),
     team: z.string().optional(),
-    eventDate: z.string().datetime().optional().nullable(),
+    eventDate: z.string().datetime().nullable().optional(),
   }),
   track: z.object({
     performanceId: z.string(),
