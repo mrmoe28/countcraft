@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Performance {
+  id         String      @id @default(cuid())
+  name       String
+  team       String?
+  eventDate  DateTime?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  track      Track?
+  countNotes CountNote[]
+}
+
+model Track {
+  id            String      @id @default(cuid())
+  performanceId String      @unique
+  fileName      String
+  durationSec   Float
+  bpm           Float
+  offsetSec     Float
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  performance   Performance @relation(fields: [performanceId], references: [id], onDelete: Cascade)
+}
+
+model CountNote {
+  id             String      @id @default(cuid())
+  performanceId  String
+  measureIndex   Int
+  countInMeasure Int
+  atSec          Float
+  text           String      @default("")
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  performance    Performance @relation(fields: [performanceId], references: [id], onDelete: Cascade)
+
+  @@unique([performanceId, measureIndex, countInMeasure])
+}
